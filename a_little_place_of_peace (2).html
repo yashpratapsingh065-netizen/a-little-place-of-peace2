@@ -1,0 +1,1107 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#090d1c">
+<title>A Little Place of Peace ♡</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Dancing+Script:wght@600&family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+<style>
+:root {
+  --bg: #070a14;
+  --panel: rgba(15, 21, 41, 0.72);
+  --panel-border: rgba(211, 197, 255, 0.18);
+  --pink: #f4b9d3;
+  --lavender: #c7b8ff;
+  --gold: #ffe3a1;
+  --text-main: #f6f4ff;
+  --text-muted: #bcbdde;
+}
+
+body {
+  margin: 0;
+  background-color: var(--bg);
+  color: var(--text-main);
+  font-family: 'Inter', sans-serif;
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+}
+
+.font-serif-title { font-family: 'Playfair Display', Georgia, serif; }
+.font-cinzel { font-family: 'Cinzel', serif; }
+.font-handwriting { font-family: 'Dancing Script', cursive; }
+
+/* Custom Scrollbar */
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: #070a14; }
+::-webkit-scrollbar-thumb { background: #1e2645; border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: #2f3a69; }
+
+/* Glassmorphism Card */
+.glass-card {
+  background: var(--panel);
+  border: 1px solid var(--panel-border);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.glass-card:hover {
+  border-color: rgba(244, 185, 211, 0.3);
+  box-shadow: 0 22px 60px rgba(0, 0, 0, 0.5), 0 0 20px rgba(199, 184, 255, 0.15);
+}
+
+/* Background canvas fixed */
+#starCanvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: -2;
+  pointer-events: none;
+}
+
+/* Glowing Moon */
+.moon-glow {
+  box-shadow: 0 0 40px rgba(255, 244, 215, 0.4), 0 0 100px rgba(199, 184, 255, 0.25);
+  animation: moonPulse 6s ease-in-out infinite alternate;
+}
+
+@keyframes moonPulse {
+  0% { box-shadow: 0 0 30px rgba(255, 244, 215, 0.3), 0 0 80px rgba(199, 184, 255, 0.18); }
+  100% { box-shadow: 0 0 50px rgba(255, 244, 215, 0.5), 0 0 120px rgba(244, 185, 211, 0.3); }
+}
+
+/* Floating Hearts Particle Container */
+.floating-heart {
+  position: fixed;
+  bottom: -50px;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0;
+  animation: heartFloat 9s linear forwards;
+}
+
+@keyframes heartFloat {
+  0% { transform: translateY(0) rotate(0deg) scale(0.6); opacity: 0; }
+  15% { opacity: 0.7; }
+  85% { opacity: 0.5; }
+  100% { transform: translateY(-115vh) rotate(45deg) scale(1.2); opacity: 0; }
+}
+
+/* Envelope Letter Styling */
+.envelope-wrapper {
+  perspective: 1000px;
+}
+
+.envelope {
+  position: relative;
+  background: linear-gradient(145deg, #1d1830, #131224);
+  border: 1px solid rgba(244, 185, 211, 0.3);
+  transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.wax-seal {
+  background: radial-gradient(circle, #e25875, #9b1d36);
+  box-shadow: 0 4px 15px rgba(226, 88, 117, 0.4), inset 0 2px 4px rgba(255, 255, 255, 0.3);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.wax-seal:hover {
+  transform: scale(1.08) rotate(5deg);
+  box-shadow: 0 6px 20px rgba(226, 88, 117, 0.6), inset 0 2px 4px rgba(255, 255, 255, 0.4);
+}
+
+/* Breathing Orb */
+.breath-orb-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.breath-orb {
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #f6d3e5, #a8a4f5 58%, #314275);
+  box-shadow: 0 0 50px rgba(184, 170, 255, 0.4);
+  transition: transform 1s ease-in-out, box-shadow 1s ease-in-out;
+}
+
+.breath-orb.inhale {
+  transform: scale(1.45);
+  box-shadow: 0 0 90px rgba(244, 185, 211, 0.7);
+}
+
+.breath-orb.hold {
+  transform: scale(1.45);
+  box-shadow: 0 0 100px rgba(255, 227, 161, 0.8);
+}
+
+.breath-orb.exhale {
+  transform: scale(0.85);
+  box-shadow: 0 0 30px rgba(168, 164, 245, 0.3);
+}
+
+/* Smoke Burn Effect for Notepad */
+@keyframes burnSmoke {
+  0% { opacity: 1; transform: scale(1); filter: blur(0px); }
+  50% { opacity: 0.5; transform: scale(0.98) translateY(-10px); filter: blur(4px) sepia(1) hue-rotate(300deg); }
+  100% { opacity: 0; transform: scale(0.9) translateY(-30px); filter: blur(12px); }
+}
+
+.burning-effect {
+  animation: burnSmoke 1.2s ease-out forwards;
+}
+
+/* Custom UI Toggle Switch */
+.toggle-checkbox:checked {
+  right: 0;
+  border-color: #f4b9d3;
+}
+.toggle-checkbox:checked + .toggle-label {
+  background-color: #3b2a54;
+}
+</style>
+</head>
+
+<body class="selection:bg-purple-900 selection:text-pink-200">
+
+<!-- Background Animated Canvas -->
+<canvas id="starCanvas"></canvas>
+
+<!-- Sticky Navigation Bar -->
+<header class="sticky top-0 z-40 w-full backdrop-blur-md bg-opacity-70 border-b border-indigo-950/60 bg-[#070a14]/80 transition-all duration-300">
+  <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
+    <a href="#" class="font-cinzel text-sm md:text-base tracking-widest text-purple-200 hover:text-pink-200 transition flex items-center gap-2">
+      <span class="text-pink-300">✦</span> A Little Place of Peace
+    </a>
+    
+    <nav class="hidden md:flex items-center space-x-6 text-xs text-slate-300 font-medium">
+      <a href="#letter" class="hover:text-pink-200 transition">Letter</a>
+      <a href="#music" class="hover:text-pink-200 transition">Music</a>
+      <a href="#feelings" class="hover:text-pink-200 transition">Feelings</a>
+      <a href="#breathe" class="hover:text-pink-200 transition">Breathe</a>
+      <a href="#wishes" class="hover:text-pink-200 transition">Wishes</a>
+      <a href="#comfort-jar" class="hover:text-pink-200 transition">Comfort Jar</a>
+      <a href="#thoughts" class="hover:text-pink-200 transition">Secret Thoughts</a>
+    </nav>
+
+    <div class="flex items-center gap-3">
+      <!-- Ambient Sound Button Dropdown Toggle -->
+      <button id="soundToggleBtn" class="text-xs px-3 py-1.5 rounded-full border border-purple-400/30 bg-purple-950/40 text-purple-200 hover:bg-purple-900/50 transition flex items-center gap-1.5">
+        <span id="soundIcon">🎧</span> Ambient Sounds
+      </button>
+
+      <span class="text-xs border border-purple-500/20 px-3 py-1 rounded-full text-purple-300/80 bg-purple-950/20 hidden sm:inline-block">
+        for Saniya ♡
+      </span>
+    </div>
+  </div>
+</header>
+
+<!-- Ambient Sound Control Panel Drawer -->
+<div id="soundDrawer" class="hidden fixed top-14 right-4 z-50 w-72 p-4 rounded-2xl glass-card text-xs space-y-4 border border-purple-400/30">
+  <div class="flex items-center justify-between border-b border-purple-500/20 pb-2">
+    <span class="font-semibold text-purple-200">Ambient Sound Machine</span>
+    <button id="closeSoundDrawer" class="text-slate-400 hover:text-white">✕</button>
+  </div>
+  
+  <!-- Rain Sound -->
+  <div class="space-y-1">
+    <div class="flex items-center justify-between">
+      <span class="text-slate-300">🌧️ Cozy Rain</span>
+      <button id="btnRain" class="px-2.5 py-1 rounded-lg bg-indigo-950 text-purple-200 border border-purple-500/30 hover:border-pink-300">Play</button>
+    </div>
+    <input type="range" id="volRain" min="0" max="1" step="0.05" value="0.4" class="w-full accent-pink-300 h-1 bg-indigo-950 rounded-lg">
+  </div>
+
+  <!-- Fireplace Sound -->
+  <div class="space-y-1">
+    <div class="flex items-center justify-between">
+      <span class="text-slate-300">🔥 Warm Hearth</span>
+      <button id="btnFire" class="px-2.5 py-1 rounded-lg bg-indigo-950 text-purple-200 border border-purple-500/30 hover:border-pink-300">Play</button>
+    </div>
+    <input type="range" id="volFire" min="0" max="1" step="0.05" value="0.4" class="w-full accent-pink-300 h-1 bg-indigo-950 rounded-lg">
+  </div>
+
+  <!-- Breeze Sound -->
+  <div class="space-y-1">
+    <div class="flex items-center justify-between">
+      <span class="text-slate-300">🍃 Night Breeze</span>
+      <button id="btnBreeze" class="px-2.5 py-1 rounded-lg bg-indigo-950 text-purple-200 border border-purple-500/30 hover:border-pink-300">Play</button>
+    </div>
+    <input type="range" id="volBreeze" min="0" max="1" step="0.05" value="0.3" class="w-full accent-pink-300 h-1 bg-indigo-950 rounded-lg">
+  </div>
+
+  <!-- Particles Toggle -->
+  <div class="pt-2 border-t border-purple-500/20 flex items-center justify-between">
+    <span class="text-slate-300">Floating Heart Particles</span>
+    <input type="checkbox" id="particleToggle" checked class="accent-pink-400 cursor-pointer w-4 h-4">
+  </div>
+</div>
+
+<main class="max-w-4xl mx-auto px-4 py-8 space-y-16">
+
+  <!-- HERO SECTION -->
+  <section class="text-center py-12 md:py-20 relative">
+    <div class="inline-block px-4 py-1.5 rounded-full border border-pink-400/20 bg-pink-950/20 text-pink-300 text-xs tracking-widest uppercase mb-4">
+      A Quiet Sanctuary Just For You
+    </div>
+    
+    <h1 class="text-4xl md:text-7xl font-serif-title font-normal tracking-tight text-white leading-tight mb-6">
+      Hey, Saniya.<br>
+      <span class="italic text-transparent bg-clip-text bg-gradient-to-r from-pink-300 via-purple-300 to-indigo-200">
+        You matter more than you know.
+      </span>
+    </h1>
+
+    <p class="max-w-2xl mx-auto text-base md:text-lg text-slate-300 font-light leading-relaxed mb-8">
+      This little corner of the universe is built just for you. No expectations, no pressure to explain anything. Just a peaceful space to pause, listen, and remember how valuable you are.
+    </p>
+
+    <!-- Glowing Moon Element -->
+    <div class="relative w-24 h-24 mx-auto my-6">
+      <div class="w-24 h-24 rounded-full bg-amber-100 moon-glow relative overflow-hidden">
+        <div class="absolute -top-2 left-6 w-24 h-24 rounded-full bg-[#070a14]"></div>
+      </div>
+    </div>
+
+    <div class="text-2xl text-pink-300 animate-bounce mt-4">♡</div>
+  </section>
+
+
+  <!-- SECRET ENVELOPE LETTER SECTION -->
+  <section id="letter" class="scroll-mt-20">
+    <div class="glass-card rounded-3xl p-6 md:p-10 text-center relative overflow-hidden">
+      <div class="text-xs uppercase tracking-widest text-purple-300 font-semibold mb-2">A Message For Your Heart</div>
+      <h2 class="text-2xl md:text-4xl font-serif-title text-white mb-6">A Letter For Saniya 💌</h2>
+      
+      <!-- Envelope Graphic Wrapper -->
+      <div id="envelopeContainer" class="max-w-md mx-auto my-6">
+        <div class="envelope rounded-2xl p-8 cursor-pointer shadow-2xl relative" id="envelopeBox">
+          <div class="text-slate-300 text-sm mb-4">Click the wax seal to unfold your note...</div>
+          <div class="w-16 h-16 mx-auto rounded-full wax-seal flex items-center justify-center text-white text-xl font-serif font-bold shadow-lg">
+            S♡R
+          </div>
+        </div>
+      </div>
+
+      <!-- Unfolded Handwritten Letter (Initially Hidden) -->
+      <div id="unfoldedLetter" class="hidden max-w-2xl mx-auto text-left bg-gradient-to-b from-[#16172e] to-[#0f1122] p-8 md:p-12 rounded-2xl border border-pink-300/20 shadow-2xl space-y-5 text-slate-200">
+        <p class="font-serif-title text-xl text-pink-200">Dear Saniya,</p>
+        
+        <p class="leading-relaxed">
+          I don't know what every day feels like inside your heart, and I won't pretend that I do. But I hope you always remember that you don't have to carry every little weight completely alone.
+        </p>
+
+        <p class="leading-relaxed">
+          You are allowed to have quiet days. You are allowed to feel tired, uncertain, or simply not like yourself. You don't have to turn every sadness into a smile just to make the world around you comfortable.
+        </p>
+
+        <p class="leading-relaxed">
+          If today has been heavy, let this be your gentle reminder: one hard moment does not define your story. You are still growing, still learning, and still endlessly worthy of softness and kindness—even on the days when you cannot see your own light.
+        </p>
+
+        <p class="leading-relaxed">
+          Whenever the world gets too loud, come back here. Let the sky slow down, let the stars stay with you, and remember that someone is always wishing you gentle moments.
+        </p>
+
+        <div class="pt-4 border-t border-purple-500/20 flex justify-between items-center">
+          <span class="font-handwriting text-2xl text-pink-300">With care & warmth, Rudra ♡</span>
+          <button id="closeLetterBtn" class="text-xs text-slate-400 hover:text-white underline">Fold Letter</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- INTERACTIVE MUSIC CORNER -->
+  <section id="music" class="scroll-mt-20">
+    <div class="glass-card rounded-3xl p-6 md:p-10 text-center">
+      <div class="text-3xl text-amber-300 mb-2">♫</div>
+      <div class="text-xs uppercase tracking-widest text-purple-300 font-semibold mb-2">A Melody To Keep You Company</div>
+      <h2 class="text-2xl md:text-4xl font-serif-title text-white mb-4">Saniya's Music Corner</h2>
+      <p class="text-slate-300 text-sm max-w-xl mx-auto mb-6">
+        Sometimes words aren't enough. Choose a song that matches your heart right now, put on your headphones, and rest for a moment.
+      </p>
+
+      <div class="max-w-md mx-auto space-y-4">
+        <select id="songSelect" class="w-full px-4 py-3 rounded-xl bg-slate-900/80 border border-purple-500/30 text-purple-100 text-sm focus:outline-none focus:border-pink-300">
+          <option value="rtOvBOTyX00">A Thousand Years — Christina Perri</option>
+          <option value="2Vv-BfVoq4g">Perfect — Ed Sheeran</option>
+          <option value="nSDgHBxUbVQ">Photograph — Ed Sheeran</option>
+          <option value="syFZfO_wfMQ">Night Changes — One Direction</option>
+          <option value="RBumgq5yVrA">Let Her Go — Passenger</option>
+          <option value="YQHsXMglC9A">Yellow — Coldplay</option>
+          <option value="3VKOX4qK3oU">Golden Hour — JVKE</option>
+          <option value="-BjZmE2gtdo">Lover — Taylor Swift</option>
+        </select>
+
+        <div class="flex gap-3">
+          <button id="btnPlaySong" class="flex-1 py-3 px-6 rounded-full bg-gradient-to-r from-pink-300 to-purple-300 text-slate-950 font-semibold text-sm hover:opacity-90 transition">
+            Play Selected Song ♫
+          </button>
+          <a id="youtubeDirect" href="https://www.youtube.com/watch?v=rtOvBOTyX00" target="_blank" class="px-4 py-3 rounded-full border border-purple-500/30 text-purple-200 text-sm hover:bg-purple-900/30 transition flex items-center justify-center">
+            YouTube ↗
+          </a>
+        </div>
+      </div>
+
+      <!-- Player Frame -->
+      <div id="playerWrap" class="hidden mt-8 max-w-2xl mx-auto rounded-2xl overflow-hidden border border-purple-500/30 shadow-2xl bg-black">
+        <iframe id="youtubeIframe" class="w-full aspect-video" src="" title="YouTube audio player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- HEART CHECK-IN MATRIX -->
+  <section id="feelings" class="scroll-mt-20">
+    <div class="glass-card rounded-3xl p-6 md:p-10">
+      <div class="text-xs uppercase tracking-widest text-purple-300 font-semibold mb-2 text-center">A Gentle Check-in</div>
+      <h2 class="text-2xl md:text-4xl font-serif-title text-white mb-2 text-center">How is your heart today?</h2>
+      <p class="text-slate-300 text-sm text-center mb-8">Tap whatever feeling is closest. No need to explain why.</p>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <button class="feeling-btn text-left p-5 rounded-2xl border border-purple-500/20 bg-purple-950/20 hover:border-pink-300/40 hover:bg-purple-900/30 transition group"
+          data-msg="You don't need to figure out your whole life right now. Unclench your jaw, relax your shoulders, and take one slow breath. Taking it one moment at a time is more than enough.">
+          <div class="text-pink-200 font-medium group-hover:text-pink-300">A little overwhelmed 🌧️</div>
+          <div class="text-xs text-slate-400 mt-1">Let's make this moment simpler.</div>
+        </button>
+
+        <button class="feeling-btn text-left p-5 rounded-2xl border border-purple-500/20 bg-purple-950/20 hover:border-pink-300/40 hover:bg-purple-900/30 transition group"
+          data-msg="Missing someone or something sits quietly in the heart and can feel heavy. You don't have to push it away. Let the feeling visit gently without letting it convince you that you'll feel this way forever.">
+          <div class="text-pink-200 font-medium group-hover:text-pink-300">Missing someone 💭</div>
+          <div class="text-xs text-slate-400 mt-1">It is okay to care deeply.</div>
+        </button>
+
+        <button class="feeling-btn text-left p-5 rounded-2xl border border-purple-500/20 bg-purple-950/20 hover:border-pink-300/40 hover:bg-purple-900/30 transition group"
+          data-msg="You don't have to earn rest by working yourself to exhaustion. You are allowed to pause right now. Get comfortable, sip some water, and give yourself the grace you offer others.">
+          <div class="text-pink-200 font-medium group-hover:text-pink-300">Tired in every way ☕</div>
+          <div class="text-xs text-slate-400 mt-1">You deserve a gentle pause.</div>
+        </button>
+
+        <button class="feeling-btn text-left p-5 rounded-2xl border border-purple-500/20 bg-purple-950/20 hover:border-pink-300/40 hover:bg-purple-900/30 transition group"
+          data-msg="I am so glad there is a light in your day. You don't need to make it bigger or explain it. Just hold onto it and enjoy it exactly as it is. ♡">
+          <div class="text-pink-200 font-medium group-hover:text-pink-300">Actually doing okay ♡</div>
+          <div class="text-xs text-slate-400 mt-1">Let this warmth stay with you.</div>
+        </button>
+
+        <button class="feeling-btn text-left p-5 rounded-2xl border border-purple-500/20 bg-purple-950/20 hover:border-pink-300/40 hover:bg-purple-900/30 transition group"
+          data-msg="Not knowing what you feel is a valid feeling too. You can sit with uncertainty without forcing a name on it. Be patient with yourself.">
+          <div class="text-pink-200 font-medium group-hover:text-pink-300">I can't explain it 🌌</div>
+          <div class="text-xs text-slate-400 mt-1">You don't need perfect words.</div>
+        </button>
+
+        <button class="feeling-btn text-left p-5 rounded-2xl border border-purple-500/20 bg-purple-950/20 hover:border-pink-300/40 hover:bg-purple-900/30 transition group"
+          data-msg="If you feel lonely, remember that you are thought of with affection. You deserve real support, connection, and warmth whenever you need it.">
+          <div class="text-pink-200 font-medium group-hover:text-pink-300">Feeling alone 🕊️</div>
+          <div class="text-xs text-slate-400 mt-1">You are remembered and valued.</div>
+        </button>
+      </div>
+
+      <!-- Response Box -->
+      <div id="feelingResponse" class="hidden mt-6 p-5 rounded-2xl border-l-4 border-pink-300 bg-purple-950/40 text-purple-100 text-sm leading-relaxed transition-all">
+      </div>
+    </div>
+  </section>
+
+
+  <!-- GUIDED 4-7-8 BREATHING CIRCLE -->
+  <section id="breathe" class="scroll-mt-20">
+    <div class="glass-card rounded-3xl p-6 md:p-10 text-center">
+      <div class="text-xs uppercase tracking-widest text-purple-300 font-semibold mb-2">Guided 4-7-8 Relaxation</div>
+      <h2 class="text-2xl md:text-4xl font-serif-title text-white mb-2">Slow The World Down</h2>
+      <p class="text-slate-300 text-sm max-w-md mx-auto mb-8">
+        Follow the orb. Inhale as it grows (4s), hold gentle peace (7s), and release all tension as it shrinks (8s).
+      </p>
+
+      <div class="breath-orb-container my-12">
+        <div id="breathOrb" class="breath-orb"></div>
+      </div>
+
+      <div id="breathInstruction" class="text-lg font-serif-title text-pink-200 mb-6 h-8">
+        Ready when you are...
+      </div>
+
+      <button id="btnStartBreathe" class="py-3 px-8 rounded-full border border-pink-300/40 bg-pink-950/30 text-pink-200 font-medium hover:bg-pink-900/40 transition">
+        Start 4-7-8 Breathing Cycle
+      </button>
+    </div>
+  </section>
+
+
+  <!-- STARRY CONSTELLATION WISHES -->
+  <section id="wishes" class="scroll-mt-20">
+    <div class="glass-card rounded-3xl p-6 md:p-10 text-center">
+      <div class="text-xs uppercase tracking-widest text-purple-300 font-semibold mb-2">Make a Wish Upon The Cosmos</div>
+      <h2 class="text-2xl md:text-4xl font-serif-title text-white mb-2">Choose a Star ✦</h2>
+      <p class="text-slate-300 text-sm max-w-md mx-auto mb-6">
+        Tap any star below to unveil a quiet wish for your day, or send your own wish into the night sky.
+      </p>
+
+      <div class="flex justify-center gap-6 my-6 text-3xl text-amber-200">
+        <button class="star-btn hover:scale-125 transition transform" data-wish="May your mind find quiet, even when the world is noisy.">✦</button>
+        <button class="star-btn hover:scale-125 transition transform" data-wish="May you find gentle courage that feels natural, not forced.">✧</button>
+        <button class="star-btn hover:scale-125 transition transform" data-wish="May warmth find its way back to you in ordinary moments.">✦</button>
+        <button class="star-btn hover:scale-125 transition transform" data-wish="May you rest without feeling any guilt.">✧</button>
+        <button class="star-btn hover:scale-125 transition transform" data-wish="May you feel loved in calm, clear, and reassuring ways.">✦</button>
+      </div>
+
+      <div id="starWishText" class="min-h-[40px] text-pink-200 font-serif-title text-base mb-6">
+        Click a star to reveal its wish...
+      </div>
+
+      <button id="btnSendCosmicWish" class="py-3 px-8 rounded-full bg-gradient-to-r from-purple-300 to-pink-300 text-slate-950 font-semibold text-sm hover:opacity-90 transition">
+        Send a Wish into the Stars ✨
+      </button>
+    </div>
+  </section>
+
+
+  <!-- JAR OF COMFORT -->
+  <section id="comfort-jar" class="scroll-mt-20">
+    <div class="glass-card rounded-3xl p-6 md:p-10 text-center">
+      <div class="text-4xl mb-2">🫙</div>
+      <div class="text-xs uppercase tracking-widest text-purple-300 font-semibold mb-2">A Little Reservoir of Light</div>
+      <h2 class="text-2xl md:text-4xl font-serif-title text-white mb-4">Saniya's Jar of Comfort</h2>
+      <p class="text-slate-300 text-sm max-w-md mx-auto mb-6">
+        Whenever you need a tiny reminder, pull a folded note out of this glass jar.
+      </p>
+
+      <div id="jarNoteDisplay" class="min-h-[90px] max-w-lg mx-auto p-6 rounded-2xl bg-purple-950/30 border border-purple-500/20 text-purple-100 font-serif-title text-base flex items-center justify-center mb-6 shadow-inner">
+        Tap the button below to draw a note from your jar...
+      </div>
+
+      <button id="btnPullNote" class="py-3 px-8 rounded-full border border-purple-400/30 bg-purple-900/30 text-purple-200 text-sm font-medium hover:border-pink-300 transition">
+        Pull a Note from the Jar 💌
+      </button>
+    </div>
+  </section>
+
+
+  <!-- SECRET THOUGHTS & THOUGHT BURNER -->
+  <section id="thoughts" class="scroll-mt-20">
+    <div class="glass-card rounded-3xl p-6 md:p-10">
+      <div class="text-xs uppercase tracking-widest text-purple-300 font-semibold mb-2 text-center">Your Safe Notepad</div>
+      <h2 class="text-2xl md:text-4xl font-serif-title text-white mb-2 text-center">Leave a Thought Here</h2>
+      <p class="text-slate-300 text-sm text-center mb-6">
+        Write down anything on your mind. It stays private in your browser on this device. If it feels heavy, you can burn and release it into smoke.
+      </p>
+
+      <div id="notepadContainer" class="space-y-4">
+        <textarea id="thoughtInput" rows="5" class="w-full p-4 rounded-2xl bg-slate-900/80 border border-purple-500/30 text-purple-100 text-sm focus:outline-none focus:border-pink-300 resize-y" placeholder="Write whatever you want... no filter needed..."></textarea>
+        
+        <div class="flex flex-wrap items-center justify-between gap-4">
+          <div class="text-xs text-slate-400" id="wordCount">0 words</div>
+          
+          <div class="flex gap-3">
+            <button id="btnSaveThought" class="py-2.5 px-5 rounded-full bg-purple-900/50 border border-purple-400/30 text-purple-200 text-xs font-medium hover:bg-purple-800/50 transition">
+              Save Note
+            </button>
+            <button id="btnBurnThought" class="py-2.5 px-5 rounded-full bg-rose-950/40 border border-rose-500/30 text-rose-300 text-xs font-medium hover:bg-rose-900/50 transition flex items-center gap-1">
+              🔥 Release & Burn
+            </button>
+          </div>
+        </div>
+        <div id="notepadStatus" class="text-xs text-pink-300 text-right h-4"></div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- NIGHT SKY REFLECTION SIGN-OFF -->
+  <section class="glass-card rounded-3xl p-8 md:p-12 text-center bg-gradient-to-b from-purple-950/40 to-slate-950/80">
+    <div class="text-3xl mb-3">🌙 ♡ ✨</div>
+    <h2 class="text-2xl md:text-4xl font-serif-title text-pink-200 mb-4">Before You Go, Saniya...</h2>
+    
+    <p class="text-slate-300 leading-relaxed max-w-xl mx-auto mb-4 text-sm md:text-base">
+      If today was difficult, I hope tomorrow brings a softer morning. If you smiled today, I hope you find many more reasons to keep smiling.
+    </p>
+
+    <p class="text-slate-300 leading-relaxed max-w-xl mx-auto mb-6 text-sm md:text-base">
+      You don't need to have everything figured out today. Take your time, grow at your own comfortable pace, and know that you are appreciated.
+    </p>
+
+    <div class="text-xs text-purple-300 tracking-widest uppercase">
+      Crafted with warmth by Rudra ♡
+    </div>
+  </section>
+
+</main>
+
+<footer class="text-center py-8 text-xs text-slate-500 border-t border-indigo-950/50">
+  A Little Place of Peace ♡ · Take what you need, leave the rest.
+</footer>
+
+
+<!-- WELCOME MODAL -->
+<div id="welcomeModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md">
+  <div class="glass-card rounded-3xl p-6 md:p-10 max-w-lg w-full text-center space-y-5 border border-pink-300/30 shadow-2xl">
+    <div class="text-4xl text-pink-300 animate-pulse">♡</div>
+    <div class="text-xs uppercase tracking-widest text-purple-300 font-semibold">A Welcome Greeting</div>
+    <h2 class="text-3xl font-serif-title text-white">Hey, Saniya ♡</h2>
+    
+    <p class="text-slate-300 text-sm leading-relaxed">
+      I built this quiet sanctuary because everyone deserves a moment in their day that asks nothing from them. You don't have to be cheerful here. You don't have to explain yourself. 
+    </p>
+
+    <p class="text-slate-300 text-sm leading-relaxed">
+      Stay as long as you like, listen to a song, take a breath, and let this page remind you that your peace matters.
+    </p>
+
+    <button id="btnEnterSanctuary" class="w-full py-3.5 rounded-full bg-gradient-to-r from-pink-300 via-purple-300 to-indigo-200 text-slate-950 font-semibold text-sm hover:opacity-90 transition shadow-lg">
+      Enter Your Peaceful Sanctuary ♡
+    </button>
+  </div>
+</div>
+
+
+<script>
+/* =========================================================
+   1. DYNAMIC STARFIELD CANVAS WITH HOVER PHYSICS & SHOOTING STARS
+   ========================================================= */
+const canvas = document.getElementById('starCanvas');
+const ctx = canvas.getContext('2d');
+
+let stars = [];
+let shootingStars = [];
+let mouse = { x: null, y: null, radius: 120 };
+
+function resizeCanvas() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+  initStars();
+}
+
+window.addEventListener('resize', resizeCanvas);
+window.addEventListener('mousemove', (e) => {
+  mouse.x = e.clientX;
+  mouse.y = e.clientY;
+});
+
+function initStars() {
+  stars = [];
+  const starCount = Math.floor((canvas.width * canvas.height) / 3000);
+  for (let i = 0; i < starCount; i++) {
+    stars.push({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height,
+      radius: Math.random() * 1.5 + 0.5,
+      baseAlpha: Math.random() * 0.7 + 0.2,
+      alpha: Math.random() * 0.7 + 0.2,
+      twinkleSpeed: Math.random() * 0.02 + 0.005,
+      vx: (Math.random() - 0.5) * 0.2,
+      vy: (Math.random() - 0.5) * 0.2
+    });
+  }
+}
+
+function addShootingStar() {
+  if (Math.random() < 0.015) {
+    shootingStars.push({
+      x: Math.random() * canvas.width,
+      y: Math.random() * (canvas.height / 2),
+      length: Math.random() * 80 + 40,
+      speed: Math.random() * 6 + 4,
+      dx: Math.random() * 4 + 2,
+      dy: Math.random() * 4 + 2,
+      alpha: 1
+    });
+  }
+}
+
+function animateStars() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  // Render twinkling stars
+  stars.forEach(s => {
+    s.x += s.vx;
+    s.y += s.vy;
+
+    if (s.x < 0) s.x = canvas.width;
+    if (s.x > canvas.width) s.x = 0;
+    if (s.y < 0) s.y = canvas.height;
+    if (s.y > canvas.height) s.y = 0;
+
+    s.alpha += s.twinkleSpeed;
+    if (s.alpha > 0.9 || s.alpha < 0.2) s.twinkleSpeed = -s.twinkleSpeed;
+
+    // React to mouse proximity
+    if (mouse.x && mouse.y) {
+      let dx = mouse.x - s.x;
+      let dy = mouse.y - s.y;
+      let dist = Math.sqrt(dx * dx + dy * dy);
+      if (dist < mouse.radius) {
+        s.alpha = Math.min(1, s.alpha + 0.3);
+      }
+    }
+
+    ctx.beginPath();
+    ctx.arc(s.x, s.y, s.radius, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(244, 225, 255, ${s.alpha})`;
+    ctx.fill();
+  });
+
+  // Render Shooting Stars
+  addShootingStar();
+  for (let i = shootingStars.length - 1; i >= 0; i--) {
+    let st = shootingStars[i];
+    st.x += st.dx;
+    st.y += st.dy;
+    st.alpha -= 0.015;
+
+    if (st.alpha <= 0) {
+      shootingStars.splice(i, 1);
+      continue;
+    }
+
+    let grad = ctx.createLinearGradient(st.x, st.y, st.x - st.dx * (st.length / 5), st.y - st.dy * (st.length / 5));
+    grad.addColorStop(0, `rgba(255, 244, 215, ${st.alpha})`);
+    grad.addColorStop(1, `rgba(255, 244, 215, 0)`);
+
+    ctx.beginPath();
+    ctx.moveTo(st.x, st.y);
+    ctx.lineTo(st.x - st.dx * (st.length / 5), st.y - st.dy * (st.length / 5));
+    ctx.strokeStyle = grad;
+    ctx.lineWidth = 1.8;
+    ctx.stroke();
+  }
+
+  requestAnimationFrame(animateStars);
+}
+
+resizeCanvas();
+animateStars();
+
+
+/* =========================================================
+   2. FLOATING HEART PARTICLES GENERATOR
+   ========================================================= */
+let particleInterval = null;
+const particleToggle = document.getElementById('particleToggle');
+
+function createFloatingHeart() {
+  if (!particleToggle.checked) return;
+
+  const heart = document.createElement('span');
+  heart.className = 'floating-heart';
+  heart.textContent = ['♡', '♥', '💕', '✧', '🌸'][Math.floor(Math.random() * 5)];
+  heart.style.left = Math.random() * 95 + 'vw';
+  heart.style.fontSize = (12 + Math.random() * 16) + 'px';
+  heart.style.color = ['#f4b9d3', '#c7b8ff', '#ffe3a1', '#fce7f3'][Math.floor(Math.random() * 4)];
+
+  document.body.appendChild(heart);
+  setTimeout(() => heart.remove(), 9000);
+}
+
+particleInterval = setInterval(createFloatingHeart, 2000);
+
+
+/* =========================================================
+   3. SYNTHESIZED AMBIENT SOUND GENERATOR (WEB AUDIO API)
+   ========================================================= */
+let audioCtx = null;
+
+function getAudioContext() {
+  if (!audioCtx) {
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  }
+  if (audioCtx.state === 'suspended') {
+    audioCtx.resume();
+  }
+  return audioCtx;
+}
+
+// Rain Sound Generator
+let rainNode = null;
+let rainGain = null;
+const btnRain = document.getElementById('btnRain');
+const volRain = document.getElementById('volRain');
+
+function toggleRain() {
+  const ctx = getAudioContext();
+  if (rainNode) {
+    rainNode.stop();
+    rainNode = null;
+    btnRain.textContent = 'Play';
+    btnRain.classList.remove('bg-pink-300', 'text-slate-950');
+    return;
+  }
+
+  const bufferSize = ctx.sampleRate * 2;
+  const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+  const data = buffer.getChannelData(0);
+  for (let i = 0; i < bufferSize; i++) {
+    data[i] = Math.random() * 2 - 1;
+  }
+
+  const whiteNoise = ctx.createBufferSource();
+  whiteNoise.buffer = buffer;
+  whiteNoise.loop = true;
+
+  const filter = ctx.createBiquadFilter();
+  filter.type = 'lowpass';
+  filter.frequency.value = 1000;
+
+  rainGain = ctx.createGain();
+  rainGain.gain.value = parseFloat(volRain.value);
+
+  whiteNoise.connect(filter);
+  filter.connect(rainGain);
+  rainGain.connect(ctx.destination);
+
+  whiteNoise.start();
+  rainNode = whiteNoise;
+
+  btnRain.textContent = 'Pause';
+  btnRain.classList.add('bg-pink-300', 'text-slate-950');
+}
+
+btnRain.addEventListener('click', toggleRain);
+volRain.addEventListener('input', () => {
+  if (rainGain) rainGain.gain.value = parseFloat(volRain.value);
+});
+
+// Fireplace Sound Generator
+let fireNode = null;
+let fireGain = null;
+const btnFire = document.getElementById('btnFire');
+const volFire = document.getElementById('volFire');
+
+function toggleFire() {
+  const ctx = getAudioContext();
+  if (fireNode) {
+    fireNode.stop();
+    fireNode = null;
+    btnFire.textContent = 'Play';
+    btnFire.classList.remove('bg-pink-300', 'text-slate-950');
+    return;
+  }
+
+  const bufferSize = ctx.sampleRate * 2;
+  const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+  const data = buffer.getChannelData(0);
+  for (let i = 0; i < bufferSize; i++) {
+    data[i] = (Math.random() * 2 - 1) * (Math.random() < 0.03 ? 3 : 0.3);
+  }
+
+  const noise = ctx.createBufferSource();
+  noise.buffer = buffer;
+  noise.loop = true;
+
+  const filter = ctx.createBiquadFilter();
+  filter.type = 'bandpass';
+  filter.frequency.value = 400;
+
+  fireGain = ctx.createGain();
+  fireGain.gain.value = parseFloat(volFire.value);
+
+  noise.connect(filter);
+  filter.connect(fireGain);
+  fireGain.connect(ctx.destination);
+
+  noise.start();
+  fireNode = noise;
+
+  btnFire.textContent = 'Pause';
+  btnFire.classList.add('bg-pink-300', 'text-slate-950');
+}
+
+btnFire.addEventListener('click', toggleFire);
+volFire.addEventListener('input', () => {
+  if (fireGain) fireGain.gain.value = parseFloat(volFire.value);
+});
+
+// Breeze Sound Generator
+let breezeNode = null;
+let breezeGain = null;
+const btnBreeze = document.getElementById('btnBreeze');
+const volBreeze = document.getElementById('volBreeze');
+
+function toggleBreeze() {
+  const ctx = getAudioContext();
+  if (breezeNode) {
+    breezeNode.stop();
+    breezeNode = null;
+    btnBreeze.textContent = 'Play';
+    btnBreeze.classList.remove('bg-pink-300', 'text-slate-950');
+    return;
+  }
+
+  const bufferSize = ctx.sampleRate * 2;
+  const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+  const data = buffer.getChannelData(0);
+  for (let i = 0; i < bufferSize; i++) {
+    data[i] = Math.random() * 2 - 1;
+  }
+
+  const noise = ctx.createBufferSource();
+  noise.buffer = buffer;
+  noise.loop = true;
+
+  const filter = ctx.createBiquadFilter();
+  filter.type = 'lowpass';
+  filter.frequency.value = 350;
+
+  breezeGain = ctx.createGain();
+  breezeGain.gain.value = parseFloat(volBreeze.value);
+
+  noise.connect(filter);
+  filter.connect(breezeGain);
+  breezeGain.connect(ctx.destination);
+
+  noise.start();
+  breezeNode = noise;
+
+  btnBreeze.textContent = 'Pause';
+  btnBreeze.classList.add('bg-pink-300', 'text-slate-950');
+}
+
+btnBreeze.addEventListener('click', toggleBreeze);
+volBreeze.addEventListener('input', () => {
+  if (breezeGain) breezeGain.gain.value = parseFloat(volBreeze.value);
+});
+
+// Sound Drawer Controls
+const soundToggleBtn = document.getElementById('soundToggleBtn');
+const soundDrawer = document.getElementById('soundDrawer');
+const closeSoundDrawer = document.getElementById('closeSoundDrawer');
+
+soundToggleBtn.addEventListener('click', () => {
+  soundDrawer.classList.toggle('hidden');
+});
+closeSoundDrawer.addEventListener('click', () => {
+  soundDrawer.classList.add('hidden');
+});
+
+
+/* =========================================================
+   4. WELCOME MODAL CONTROLS
+   ========================================================= */
+const welcomeModal = document.getElementById('welcomeModal');
+const btnEnterSanctuary = document.getElementById('btnEnterSanctuary');
+
+btnEnterSanctuary.addEventListener('click', () => {
+  welcomeModal.classList.add('hidden');
+  getAudioContext(); // Pre-unlock audio context on user interaction
+});
+
+
+/* =========================================================
+   5. ENVELOPE UNFOLDING LETTER
+   ========================================================= */
+const envelopeBox = document.getElementById('envelopeBox');
+const envelopeContainer = document.getElementById('envelopeContainer');
+const unfoldedLetter = document.getElementById('unfoldedLetter');
+const closeLetterBtn = document.getElementById('closeLetterBtn');
+
+envelopeBox.addEventListener('click', () => {
+  envelopeContainer.classList.add('hidden');
+  unfoldedLetter.classList.remove('hidden');
+});
+
+closeLetterBtn.addEventListener('click', () => {
+  unfoldedLetter.classList.add('hidden');
+  envelopeContainer.classList.remove('hidden');
+});
+
+
+/* =========================================================
+   6. MUSIC CORNER CONTROLS
+   ========================================================= */
+const songSelect = document.getElementById('songSelect');
+const btnPlaySong = document.getElementById('btnPlaySong');
+const playerWrap = document.getElementById('playerWrap');
+const youtubeIframe = document.getElementById('youtubeIframe');
+const youtubeDirect = document.getElementById('youtubeDirect');
+
+btnPlaySong.addEventListener('click', () => {
+  const songId = songSelect.value;
+  youtubeIframe.src = `https://www.youtube-nocookie.com/embed/${songId}?autoplay=1&rel=0`;
+  youtubeDirect.href = `https://www.youtube.com/watch?v=${songId}`;
+  playerWrap.classList.remove('hidden');
+  playerWrap.scrollIntoView({ behavior: 'smooth', block: 'center' });
+});
+
+
+/* =========================================================
+   7. HEART CHECK-IN MATRIX
+   ========================================================= */
+const feelingBtns = document.querySelectorAll('.feeling-btn');
+const feelingResponse = document.getElementById('feelingResponse');
+
+feelingBtns.forEach(btn => {
+  btn.addEventListener('click', () => {
+    feelingResponse.textContent = btn.dataset.msg;
+    feelingResponse.classList.remove('hidden');
+  });
+});
+
+
+/* =========================================================
+   8. GUIDED 4-7-8 BREATHING ORB
+   ========================================================= */
+const breathOrb = document.getElementById('breathOrb');
+const breathInstruction = document.getElementById('breathInstruction');
+const btnStartBreathe = document.getElementById('btnStartBreathe');
+let isBreathing = false;
+let breathTimeout = null;
+
+function runBreathingCycle() {
+  if (!isBreathing) return;
+
+  // Inhale 4s
+  breathInstruction.textContent = 'Breathe in gently... (4s)';
+  breathOrb.className = 'breath-orb inhale';
+
+  breathTimeout = setTimeout(() => {
+    if (!isBreathing) return;
+    // Hold 7s
+    breathInstruction.textContent = 'Hold gently... (7s)';
+    breathOrb.className = 'breath-orb hold';
+
+    breathTimeout = setTimeout(() => {
+      if (!isBreathing) return;
+      // Exhale 8s
+      breathInstruction.textContent = 'Breathe out slowly... (8s)';
+      breathOrb.className = 'breath-orb exhale';
+
+      breathTimeout = setTimeout(() => {
+        if (isBreathing) runBreathingCycle();
+      }, 8000);
+    }, 7000);
+  }, 4000);
+}
+
+btnStartBreathe.addEventListener('click', () => {
+  if (isBreathing) {
+    isBreathing = false;
+    clearTimeout(breathTimeout);
+    breathOrb.className = 'breath-orb';
+    breathInstruction.textContent = 'You paused. That is perfectly okay. ♡';
+    btnStartBreathe.textContent = 'Start 4-7-8 Breathing Cycle';
+  } else {
+    isBreathing = true;
+    btnStartBreathe.textContent = 'Stop Breathing Cycle';
+    runBreathingCycle();
+  }
+});
+
+
+/* =========================================================
+   9. STARRY WISHES & COSMIC CONFETTI
+   ========================================================= */
+const starBtns = document.querySelectorAll('.star-btn');
+const starWishText = document.getElementById('starWishText');
+const btnSendCosmicWish = document.getElementById('btnSendCosmicWish');
+
+starBtns.forEach(btn => {
+  btn.addEventListener('click', () => {
+    starWishText.textContent = btn.dataset.wish;
+  });
+});
+
+btnSendCosmicWish.addEventListener('click', () => {
+  if (typeof confetti === 'function') {
+    confetti({
+      particleCount: 70,
+      spread: 80,
+      origin: { y: 0.7 },
+      colors: ['#f4b9d3', '#c7b8ff', '#ffe3a1']
+    });
+  }
+  starWishText.textContent = "Your wish has been released into the stars. May life bring you gentleness. ✨";
+});
+
+
+/* =========================================================
+   10. JAR OF COMFORT GENERATOR
+   ========================================================= */
+const jarNotes = [
+  "Take a slow sip of water. Give yourself a gentle moment.",
+  "You do not need to earn your right to rest.",
+  "Your existence makes the world significantly softer.",
+  "It is completely okay to not have all the answers today.",
+  "You are allowed to take up space exactly as you are.",
+  "Be as kind to yourself as you are to the people you care about.",
+  "One quiet, ordinary step forward is more than enough.",
+  "You don't have to carry every weight by yourself.",
+  "Your feelings are valid, whether they are quiet or overwhelming."
+];
+
+const btnPullNote = document.getElementById('btnPullNote');
+const jarNoteDisplay = document.getElementById('jarNoteDisplay');
+
+btnPullNote.addEventListener('click', () => {
+  const randomNote = jarNotes[Math.floor(Math.random() * jarNotes.length)];
+  jarNoteDisplay.textContent = `"${randomNote}"`;
+});
+
+
+/* =========================================================
+   11. PRIVATE THOUGHT NOTEPAD & THOUGHT BURNER
+   ========================================================= */
+const thoughtInput = document.getElementById('thoughtInput');
+const wordCount = document.getElementById('wordCount');
+const btnSaveThought = document.getElementById('btnSaveThought');
+const btnBurnThought = document.getElementById('btnBurnThought');
+const notepadStatus = document.getElementById('notepadStatus');
+
+// Load saved thought
+try {
+  const saved = localStorage.getItem('saniya_peace_note');
+  if (saved) {
+    thoughtInput.value = saved;
+    updateWordCount();
+  }
+} catch (e) {}
+
+function updateWordCount() {
+  const text = thoughtInput.value.trim();
+  const count = text ? text.split(/\s+/).length : 0;
+  wordCount.textContent = `${count} word${count === 1 ? '' : 's'}`;
+}
+
+thoughtInput.addEventListener('input', updateWordCount);
+
+btnSaveThought.addEventListener('click', () => {
+  try {
+    localStorage.setItem('saniya_peace_note', thoughtInput.value);
+    notepadStatus.textContent = "Saved privately on this device. ♡";
+    setTimeout(() => notepadStatus.textContent = "", 3000);
+  } catch (e) {
+    notepadStatus.textContent = "Could not save to local storage.";
+  }
+});
+
+btnBurnThought.addEventListener('click', () => {
+  if (!thoughtInput.value.trim()) return;
+
+  thoughtInput.classList.add('burning-effect');
+  notepadStatus.textContent = "Releasing and burning your thought... 🔥";
+
+  setTimeout(() => {
+    thoughtInput.value = "";
+    thoughtInput.classList.remove('burning-effect');
+    try {
+      localStorage.removeItem('saniya_peace_note');
+    } catch (e) {}
+    updateWordCount();
+    notepadStatus.textContent = "Released into the night sky. Take a deep breath. ♡";
+    setTimeout(() => notepadStatus.textContent = "", 4000);
+  }, 1200);
+});
+</script>
+
+</body>
+</html>
