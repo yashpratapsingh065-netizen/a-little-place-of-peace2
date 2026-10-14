@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#090d1c">
+<title>A Little Place of Peace ♡</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Dancing+Script:wght@600&family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+<style>
+:root {
+  --bg: #070a14;
+  --panel: rgba(15, 21, 41, 0.72);
+  --panel-border: rgba(211, 197, 255, 0.18);
+  --pink: #f4b9d3;
+  --lavender: #c7b8ff;
+  --gold: #ffe3a1;
+  --text-main: #f6f4ff;
+  --text-muted: #bcbdde;
+}
+
+body {
+  margin: 0;
+  background-color: var(--bg);
+  color: var(--text-main);
+  font-family: 'Inter', sans-serif;
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+}
+
+.font-serif-title { font-family: 'Playfair Display', Georgia, serif; }
+.font-cinzel { font-family: 'Cinzel', serif; }
+.font-handwriting { font-family: 'Dancing Script', cursive; }
+
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: #070a14; }
+::-webkit-scrollbar-thumb { background: #1e2645; border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: #2f3a69; }
+
+.glass-card {
+  background: var(--panel);
+  border: 1px solid var(--panel-border);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.glass-card:hover {
+  border-color: rgba(244, 185, 211, 0.3);
+  box-shadow: 0 22px 60px rgba(0, 0, 0, 0.5), 0 0 20px rgba(199, 184, 255, 0.15);
+}
+
+#starCanvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: -2;
+  pointer-events: none;
+}
+
+.moon-glow {
+  box-shadow: 0 0 40px rgba(255, 244, 215, 0.4), 0 0 100px rgba(199, 184, 255, 0.25);
+  animation: moonPulse 6s ease-in-out infinite alternate;
+}
+
+@keyframes moonPulse {
+  0% { box-shadow: 0 0 30px rgba(255, 244, 215, 0.3), 0 0 80px rgba(199, 184, 255, 0.18); }
+  100% { box-shadow: 0 0 50px rgba(255, 244, 215, 0.5), 0 0 120px rgba(244, 185, 211, 0.3); }
+}
+
+.floating-heart {
+  position: fixed;
+  bottom: -50px;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0;
+  animation: heartFloat 9s linear forwards;
+}
+
+@keyframes heartFloat {
+  0% { transform: translateY(0) rotate(0deg) scale(0.6); opacity: 0; }
+  15% { opacity: 0.7; }
+  85% { opacity: 0.5; }
+  100% { transform: translateY(-115vh) rotate(45deg) scale(1.2); opacity: 0; }
+}
+
+.envelope-wrapper { perspective: 1000px; }
+
+.envelope {
+  position: relative;
+  background: linear-gradient(145deg, #1d1830, #131224);
+  border: 1px solid rgba(244, 185, 211, 0.3);
+  transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.wax-seal {
+  background: radial-gradient(circle, #e25875, #9b1d36);
+  box-shadow: 0 4px 15px rgba(226, 88, 117, 0.4), inset 0 2px 4px rgba(255, 255, 255, 0.3);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.wax-seal:hover {
+  transform: scale(1.08) rotate(5deg);
+  box-shadow: 0 6px 20px rgba(226, 88, 117, 0.6), inset 0 2px 4px rgba(255, 255, 255, 0.4);
+}
+
+.breath-orb-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.breath-orb {
+ 
