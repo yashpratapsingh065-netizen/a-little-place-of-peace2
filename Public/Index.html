@@ -119,4 +119,219 @@ body {
 }
 
 .breath-orb {
- 
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #f6d3e5, #a8a4f5 58%, #314275);
+  box-shadow: 0 0 50px rgba(184, 170, 255, 0.4);
+  transition: transform 1s ease-in-out, box-shadow 1s ease-in-out;
+}
+
+.breath-orb.inhale {
+  transform: scale(1.45);
+  box-shadow: 0 0 90px rgba(244, 185, 211, 0.7);
+}
+
+.breath-orb.hold {
+  transform: scale(1.45);
+  box-shadow: 0 0 100px rgba(255, 227, 161, 0.8);
+}
+
+.breath-orb.exhale {
+  transform: scale(0.85);
+  box-shadow: 0 0 30px rgba(168, 164, 245, 0.3);
+}
+
+@keyframes burnSmoke {
+  0% { opacity: 1; transform: scale(1); filter: blur(0px); }
+  50% { opacity: 0.5; transform: scale(0.98) translateY(-10px); filter: blur(4px) sepia(1) hue-rotate(300deg); }
+  100% { opacity: 0; transform: scale(0.9) translateY(-30px); filter: blur(12px); }
+}
+
+.burning-effect {
+  animation: burnSmoke 1.2s ease-out forwards;
+}
+
+.toggle-checkbox:checked {
+  right: 0;
+  border-color: #f4b9d3;
+}
+
+.toggle-checkbox:checked + .toggle-label {
+  background-color: #3b2a54;
+}
+</style>
+</head>
+
+<body class="selection:bg-purple-900 selection:text-pink-200">
+
+<canvas id="starCanvas"></canvas>
+
+<header class="sticky top-0 z-40 w-full backdrop-blur-md bg-opacity-70 border-b border-indigo-950/60 bg-[#070a14]/80 transition-all duration-300">
+  <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
+    <a href="#" class="font-cinzel text-sm md:text-base tracking-widest text-purple-200 hover:text-pink-200 transition flex items-center gap-2">
+      <span class="text-pink-300">✦</span> A Little Place of Peace
+    </a>
+
+    <nav class="hidden md:flex items-center space-x-6 text-xs text-slate-300 font-medium">
+      <a href="#letter" class="hover:text-pink-200 transition">Letter</a>
+      <a href="#music" class="hover:text-pink-200 transition">Music</a>
+      <a href="#feelings" class="hover:text-pink-200 transition">Feelings</a>
+      <a href="#breathe" class="hover:text-pink-200 transition">Breathe</a>
+      <a href="#wishes" class="hover:text-pink-200 transition">Wishes</a>
+      <a href="#comfort-jar" class="hover:text-pink-200 transition">Comfort Jar</a>
+      <a href="#thoughts" class="hover:text-pink-200 transition">Secret Thoughts</a>
+    </nav>
+
+    <div class="flex items-center gap-3">
+      <button id="soundToggleBtn" class="text-xs px-3 py-1.5 rounded-full border border-purple-400/30 bg-purple-950/40 text-purple-200 hover:bg-purple-900/50 transition flex items-center gap-1.5">
+        <span id="soundIcon">🎧</span> Ambient Sounds
+      </button>
+
+      <span class="text-xs border border-purple-500/20 px-3 py-1 rounded-full text-purple-300/80 bg-purple-950/20 hidden sm:inline-block">
+        for Saniya ♡
+      </span>
+    </div>
+  </div>
+</header>
+
+<div id="soundDrawer" class="hidden fixed top-14 right-4 z-50 w-72 p-4 rounded-2xl glass-card text-xs space-y-4 border border-purple-400/30">
+  <div class="flex items-center justify-between border-b border-purple-500/20 pb-2">
+    <span class="font-semibold text-purple-200">Ambient Sound Machine</span>
+    <button id="closeSoundDrawer" class="text-slate-400 hover:text-white">✕</button>
+  </div>
+
+  <div class="space-y-1">
+    <div class="flex items-center justify-between">
+      <span class="text-slate-300">🌧️ Cozy Rain</span>
+      <button id="btnRain" class="px-2.5 py-1 rounded-lg bg-indigo-950 text-purple-200 border border-purple-500/30 hover:border-pink-300">Play</button>
+    </div>
+    <input type="range" id="volRain" min="0" max="1" step="0.05" value="0.4" class="w-full accent-pink-300 h-1 bg-indigo-950 rounded-lg">
+  </div>
+
+  <div class="space-y-1">
+    <div class="flex items-center justify-between">
+      <span class="text-slate-300">🔥 Warm Hearth</span>
+      <button id="btnFire" class="px-2.5 py-1 rounded-lg bg-indigo-950 text-purple-200 border border-purple-500/30 hover:border-pink-300">Play</button>
+    </div>
+    <input type="range" id="volFire" min="0" max="1" step="0.05" value="0.4" class="w-full accent-pink-300 h-1 bg-indigo-950 rounded-lg">
+  </div>
+
+  <div class="space-y-1">
+    <div class="flex items-center justify-between">
+      <span class="text-slate-300">🍃 Night Breeze</span>
+      <button id="btnBreeze" class="px-2.5 py-1 rounded-lg bg-indigo-950 text-purple-200 border border-purple-500/30 hover:border-pink-300">Play</button>
+    </div>
+    <input type="range" id="volBreeze" min="0" max="1" step="0.05" value="0.3" class="w-full accent-pink-300 h-1 bg-indigo-950 rounded-lg">
+  </div>
+
+  <div class="pt-2 border-t border-purple-500/20 flex items-center justify-between">
+    <span class="text-slate-300">Floating Heart Particles</span>
+    <input type="checkbox" id="particleToggle" checked class="accent-pink-400 cursor-pointer w-4 h-4">
+  </div>
+</div>
+
+<main class="max-w-4xl mx-auto px-4 py-8 space-y-16">
+
+  <section class="text-center py-12 md:py-20 relative">
+    <div class="inline-block px-4 py-1.5 rounded-full border border-pink-400/20 bg-pink-950/20 text-pink-300 text-xs tracking-widest uppercase mb-4">
+      A Quiet Sanctuary Just For You
+    </div>
+
+    <h1 class="text-4xl md:text-7xl font-serif-title font-normal tracking-tight text-white leading-tight mb-6">
+      Hey, Saniya.<br>
+      <span class="italic text-transparent bg-clip-text bg-gradient-to-r from-pink-300 via-purple-300 to-indigo-200">
+        You matter more than you know.
+      </span>
+    </h1>
+
+    <p class="max-w-2xl mx-auto text-base md:text-lg text-slate-300 font-light leading-relaxed mb-8">
+      This little corner of the universe is built just for you. No expectations, no pressure to explain anything. Just a peaceful space to pause, listen, and remember how valuable you are.
+    </p>
+
+    <div class="relative w-24 h-24 mx-auto my-6">
+      <div class="w-24 h-24 rounded-full bg-amber-100 moon-glow relative overflow-hidden">
+        <div class="absolute -top-2 left-6 w-24 h-24 rounded-full bg-[#070a14]"></div>
+      </div>
+    </div>
+
+    <div class="text-2xl text-pink-300 animate-bounce mt-4">♡</div>
+  </section>
+
+  <section id="letter" class="scroll-mt-20">
+    <div class="glass-card rounded-3xl p-6 md:p-10 text-center relative overflow-hidden">
+      <div class="text-xs uppercase tracking-widest text-purple-300 font-semibold mb-2">A Message For Your Heart</div>
+      <h2 class="text-2xl md:text-4xl font-serif-title text-white mb-6">A Letter For Saniya 💌</h2>
+
+      <div id="envelopeContainer" class="max-w-md mx-auto my-6">
+        <div class="envelope rounded-2xl p-8 cursor-pointer shadow-2xl relative" id="envelopeBox">
+          <div class="text-slate-300 text-sm mb-4">Click the wax seal to unfold your note...</div>
+          <div class="w-16 h-16 mx-auto rounded-full wax-seal flex items-center justify-center text-white text-xl font-serif font-bold shadow-lg">
+            S♡R
+          </div>
+        </div>
+      </div>
+
+      <div id="unfoldedLetter" class="hidden max-w-2xl mx-auto text-left bg-gradient-to-b from-[#16172e] to-[#0f1122] p-8 md:p-12 rounded-2xl border border-pink-300/20 shadow-2xl space-y-5 text-slate-200">
+        <p class="font-serif-title text-xl text-pink-200">Dear Saniya,</p>
+
+        <p class="leading-relaxed">
+          I don't know what every day feels like inside your heart, and I won't pretend that I do. But I hope you always remember that you don't have to carry every little weight completely alone.
+        </p>
+
+        <p class="leading-relaxed">
+          You are allowed to have quiet days. You are allowed to feel tired, uncertain, or simply not like yourself. You don't have to turn every sadness into a smile just to make the world around you comfortable.
+        </p>
+
+        <p class="leading-relaxed">
+          If today has been heavy, let this be your gentle reminder: one hard moment does not define your story. You are still growing, still learning, and still endlessly worthy of softness and kindness—even on the days when you cannot see your own light.
+        </p>
+
+        <p class="leading-relaxed">
+          Whenever the world gets too loud, come back here. Let the sky slow down, let the stars stay with you, and remember that someone is always wishing you gentle moments.
+        </p>
+
+        <div class="pt-4 border-t border-purple-500/20 flex justify-between items-center">
+          <span class="font-handwriting text-2xl text-pink-300">With care & warmth, Rudra ♡</span>
+          <button id="closeLetterBtn" class="text-xs text-slate-400 hover:text-white underline">Fold Letter</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="music" class="scroll-mt-20">
+    <div class="glass-card rounded-3xl p-6 md:p-10 text-center">
+      <div class="text-3xl text-amber-300 mb-2">♫</div>
+      <div class="text-xs uppercase tracking-widest text-purple-300 font-semibold mb-2">A Melody To Keep You Company</div>
+      <h2 class="text-2xl md:text-4xl font-serif-title text-white mb-4">Saniya's Music Corner</h2>
+      <p class="text-slate-300 text-sm max-w-xl mx-auto mb-6">
+        Sometimes words aren't enough. Choose a song that matches your heart right now, put on your headphones, and rest for a moment.
+      </p>
+
+      <div class="max-w-md mx-auto space-y-4">
+        <select id="songSelect" class="w-full px-4 py-3 rounded-xl bg-slate-900/80 border border-purple-500/30 text-purple-100 text-sm focus:outline-none focus:border-pink-300">
+          <option value="rtOvBOTyX00">A Thousand Years — Christina Perri</option>
+          <option value="2Vv-BfVoq4g">Perfect — Ed Sheeran</option>
+          <option value="nSDgHBxUbVQ">Photograph — Ed Sheeran</option>
+          <option value="syFZfO_wfMQ">Night Changes — One Direction</option>
+          <option value="RBumgq5yVrA">Let Her Go — Passenger</option>
+          <option value="YQHsXMglC9A">Yellow — Coldplay</option>
+          <option value="3VKOX4qK3oU">Golden Hour — JVKE</option>
+          <option value="-BjZmE2gtdo">Lover — Taylor Swift</option>
+        </select>
+
+        <div class="flex gap-3">
+          <button id="btnPlaySong" class="flex-1 py-3 px-6 rounded-full bg-gradient-to-r from-pink-300 to-purple-300 text-slate-950 font-semibold text-sm hover:opacity-90 transition">
+            Play Selected Song ♫
+          </button>
+          <a id="youtubeDirect" href="https://www.youtube.com/watch?v=rtOvBOTyX00" target="_blank" class="px-4 py-3 rounded-full border border-purple-500/30 text-purple-200 text-sm hover:bg-purple-900/30 transition flex items-center justify-center">
+            YouTube ↗
+          </a>
+        </div>
+      </div>
+
+      <div id="playerWrap" class="hidden mt-8 max-w-2xl mx-auto rounded-2xl overflow-hidden border border-purple-500/30 shadow-2xl bg-black">
+        <iframe id="youtubeIframe" class="w-full aspect-video" src="" title="YouTube audio player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+      </div>
+    </div>
+  </section>
